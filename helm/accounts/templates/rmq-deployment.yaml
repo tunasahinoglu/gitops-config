@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-mq
+  labels:
+    app: accounts-mq
+spec:
+  replicas: {{ .Values.rabbitmq.replicas }}
+  selector:
+    matchLabels:
+      app: accounts-mq
+  template:
+    metadata:
+      labels:
+        app: accounts-mq
+    spec:
+      containers:
+        - name: accounts-mq
+          image: {{ .Values.rabbitmq.image }}:{{ .Values.rabbitmq.tag }}
+          ports:
+            - name: accounts-mq-port
+              containerPort: {{ .Values.rabbitmq.containerPort }}
+          env:
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: rmq-pass
+            - name: RABBITMQ_DEFAULT_USER
+              value: "{{ .Values.defaultUser }}"

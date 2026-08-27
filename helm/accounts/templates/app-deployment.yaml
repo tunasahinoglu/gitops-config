@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-app
+  labels:
+    app: accounts-app
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: accounts-app
+  template:
+    metadata:
+      labels:
+        app: accounts-app
+    spec:
+{{- if .Values.dockerregistry.enabled }}
+      imagePullSecrets:
+        - name: docker-registry-secret
+{{- end }}
+      initContainers:
+        - name: init-db
+          image: {{ .Values.initcontainers.image }}
+          command:
+            - sh
+            - -c
+            - |
+              until nslookup accounts-db.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for db; sleep 2; done;
+        - name: init-cache
+          image: {{ .Values.initcontainers.image }}
+          command:
+            - sh
+            - -c
+            - |
+              until nslookup accounts-cache.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for cache; sleep 2; done;
+      containers:
+        - name: accounts-app
+          image: {{ .Values.app.image }}:{{ .Values.app.tag }}
+          imagePullPolicy: Always
+          ports:
+            - name: app-port
+              containerPort: {{ .Values.app.containerPort }}
+          env:
+            - name: DB_HOST
+              value: accounts-db
+            - name: DB_USER
+              value: root
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: db-pass
+            - name: MEMCACHED_HOST
+              value: accounts-cache
+            - name: RMQ_HOST
+              value: accounts-mq
+            - name: RMQ_USER
+              value: {{ .Values.defaultUser | quote }}
+            - name: RMQ_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: rmq-pass
+            - name: ADMIN_USER
+              value: admin
+            - name: ADMIN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.existingSecret }}
+                  key: admin-pass

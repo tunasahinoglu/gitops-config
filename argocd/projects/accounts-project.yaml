@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: accounts
+  namespace: argocd
+spec:
+  description: Accounts application project
+  sourceRepos:
+    - https://github.com/tunasahinoglu/gitops-config.git
+  destinations:
+    - namespace: accounts
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-cache
+  labels:
+    app: accounts-cache
+spec:
+  replicas: {{ .Values.memcached.replicas }}
+  selector:
+    matchLabels:
+      app: accounts-cache
+  template:
+    metadata:
+      labels:
+        app: accounts-cache
+    spec:
+      containers:
+        - name: accounts-cache
+          image: {{ .Values.memcached.image }}:{{ .Values.memcached.tag }}
+          ports:
+            - name: accounts-cache-port
+              containerPort: {{ .Values.memcached.containerPort }}
