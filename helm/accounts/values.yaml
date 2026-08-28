@@ -2,13 +2,13 @@ defaultUser: guest
 app:
   # Image and tag are updated automatically by the CI pipeline in gitops-app.
   image: 477537078556.dkr.ecr.us-east-1.amazonaws.com/gitops-accounts-app
-  tag: 0e8498d
+  tag: 2a0102d
   replicas: 1
   containerPort: 8080
   servicePort: 8080
 db:
   image: 477537078556.dkr.ecr.us-east-1.amazonaws.com/gitops-accounts-db
-  tag: 0e8498d
+  tag: 2a0102d
   replicas: 1
   containerPort: 3306
   servicePort: 3306
