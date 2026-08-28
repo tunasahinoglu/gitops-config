@@ -11,6 +11,10 @@ Part of a three repo GitOps project:
 - [gitops-infra](https://github.com/tunasahinoglu/gitops-infra) - Terraform
   for the VPC and EKS cluster
 
+## Architecture
+
+![architecture](architecture.png)
+
 ## Layout
 
 ```
@@ -57,9 +61,6 @@ helm install accounts ./helm/accounts \
   --set secrets.rmqPassword=... \
   --set secrets.adminPassword=...
 ```
-
-A production setup would use something like External Secrets Operator or
-Sealed Secrets rather than creating the secret by hand.
 
 ## Applying the ArgoCD manifests
 
