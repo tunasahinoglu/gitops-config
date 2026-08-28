@@ -18,7 +18,7 @@ metadata:
 spec:
   ports:
     - port: {{ .Values.db.servicePort }}
-      targetPort: accounts-db-port
+      targetPort: db-port
       protocol: TCP
   selector:
     app: accounts-db
@@ -31,7 +31,7 @@ metadata:
 spec:
   ports:
     - port: {{ .Values.memcached.servicePort }}
-      targetPort: accounts-cache-port
+      targetPort: cache-port
       protocol: TCP
   selector:
     app: accounts-cache
@@ -44,7 +44,7 @@ metadata:
 spec:
   ports:
     - port: {{ .Values.rabbitmq.servicePort }}
-      targetPort: accounts-mq-port
+      targetPort: mq-port
       protocol: TCP
   selector:
     app: accounts-mq

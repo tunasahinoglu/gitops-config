@@ -18,5 +18,5 @@ spec:
         - name: accounts-cache
           image: {{ .Values.memcached.image }}:{{ .Values.memcached.tag }}
           ports:
-            - name: accounts-cache-port
+            - name: cache-port
               containerPort: {{ .Values.memcached.containerPort }}

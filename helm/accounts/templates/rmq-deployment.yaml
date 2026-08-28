@@ -18,7 +18,7 @@ spec:
         - name: accounts-mq
           image: {{ .Values.rabbitmq.image }}:{{ .Values.rabbitmq.tag }}
           ports:
-            - name: accounts-mq-port
+            - name: mq-port
               containerPort: {{ .Values.rabbitmq.containerPort }}
           env:
             - name: RABBITMQ_DEFAULT_PASS
