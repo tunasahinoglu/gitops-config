@@ -1,43 +1,36 @@
 defaultUser: guest
-
 app:
   # Image and tag are updated automatically by the CI pipeline in gitops-app.
-  image: REPLACE_WITH_ECR_APP_IMAGE
-  tag: latest
+  image: 477537078556.dkr.ecr.us-east-1.amazonaws.com/gitops-accounts-app
+  tag: 6434035
   replicas: 1
   containerPort: 8080
   servicePort: 8080
-
 db:
-  image: REPLACE_WITH_ECR_DB_IMAGE
-  tag: latest
+  image: 477537078556.dkr.ecr.us-east-1.amazonaws.com/gitops-accounts-db
+  tag: 6434035
   replicas: 1
   containerPort: 3306
   servicePort: 3306
   storageClass: gp2
   storageSize: 3Gi
-
 memcached:
   image: memcached
   tag: latest
   replicas: 1
   containerPort: 11211
   servicePort: 11211
-
 rabbitmq:
   image: rabbitmq
   tag: latest
   replicas: 1
   containerPort: 5672
   servicePort: 5672
-
 initcontainers:
   image: busybox
-
 ingress:
   enabled: true
   servicePort: 8080
-
 # Passwords are not stored here. Supply them at install time:
 #   helm install accounts ./helm/accounts \
 #     --set secrets.dbPassword=... --set secrets.rmqPassword=... --set secrets.adminPassword=...
@@ -49,7 +42,6 @@ secrets:
   dbPassword: ""
   rmqPassword: ""
   adminPassword: ""
-
 dockerregistry:
   enabled: false
   server: ""
